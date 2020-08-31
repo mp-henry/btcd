@@ -441,7 +441,9 @@ func loadConfig() (*config, []string, error) {
 	// Pre-parse the command line options to see if an alternative config
 	// file or the version flag was specified.  Any errors aside from the
 	// help message error can be ignored here since they will be caught by
-	// the final parse below.
+	// the final parse below. A copy here is made on purpose. Making this a
+	// pointer causes it to set the same fields in the same config struct
+	// on the second parse which can cause duplicate entries in slices.
 	preCfg := cfg
 	preParser := newConfigParser(&preCfg, &serviceOpts, flags.HelpFlag)
 	_, err := preParser.Parse()
@@ -891,7 +893,7 @@ func loadConfig() (*config, []string, error) {
 
 	// Ensure there is at least one mining address when the generate flag is
 	// set.
-	if cfg.Generate && len(cfg.MiningAddrs) == 0 {
+	if cfg.Generate && len(cfg.miningAddrs) == 0 {
 		str := "%s: the generate flag is set, but there are no mining " +
 			"addresses specified "
 		err := fmt.Errorf(str, funcName)
