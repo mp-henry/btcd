@@ -3,7 +3,6 @@ module github.com/btcsuite/btcd/txscript/v2
 require (
 	github.com/btcsuite/btcd/address/v2 v2.0.0
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2
-	github.com/btcsuite/btcd/btcutil v1.1.4
 	github.com/btcsuite/btcd/chaincfg/v2 v2.0.0
 	github.com/btcsuite/btcd/chainhash/v2 v2.0.0
 	github.com/btcsuite/btcd/wire/v2 v2.0.0
@@ -14,8 +13,6 @@ require (
 )
 
 require (
-	github.com/btcsuite/btcd v0.23.5-0.20231215221805-96c9fd8078fd // indirect
-	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

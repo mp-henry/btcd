@@ -18,7 +18,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chainhash/v2"
 	"github.com/btcsuite/btcd/wire/v2"
 )
@@ -917,7 +916,8 @@ func executeTaprootRefTest(t *testing.T, testCase taprootJsonTest) {
 	if err != nil {
 		t.Fatalf("unable to decode hex: %v", err)
 	}
-	tx, err := btcutil.NewTxFromBytes(txHex)
+	tx := &wire.MsgTx{}
+	err = tx.Deserialize(bytes.NewReader(txHex))
 	if err != nil {
 		t.Fatalf("unable to decode hex: %v", err)
 	}
@@ -940,7 +940,7 @@ func executeTaprootRefTest(t *testing.T, testCase taprootJsonTest) {
 		}
 
 		prevOutFetcher.AddPrevOut(
-			tx.MsgTx().TxIn[i].PreviousOutPoint, &txOut,
+			tx.TxIn[i].PreviousOutPoint, &txOut,
 		)
 
 		if i == testCase.Index {
@@ -954,10 +954,10 @@ func executeTaprootRefTest(t *testing.T, testCase taprootJsonTest) {
 	}
 
 	makeVM := func() *Engine {
-		hashCache := NewTxSigHashes(tx.MsgTx(), prevOutFetcher)
+		hashCache := NewTxSigHashes(tx, prevOutFetcher)
 
 		vm, err := NewEngine(
-			prevOut.PkScript, tx.MsgTx(), testCase.Index,
+			prevOut.PkScript, tx, testCase.Index,
 			flags, nil, hashCache, prevOut.Value, prevOutFetcher,
 		)
 		if err != nil {
@@ -968,7 +968,7 @@ func executeTaprootRefTest(t *testing.T, testCase taprootJsonTest) {
 	}
 
 	if testCase.Success != nil {
-		tx.MsgTx().TxIn[testCase.Index].SignatureScript, err = hex.DecodeString(
+		tx.TxIn[testCase.Index].SignatureScript, err = hex.DecodeString(
 			testCase.Success.ScriptSig,
 		)
 		if err != nil {
@@ -985,7 +985,7 @@ func executeTaprootRefTest(t *testing.T, testCase taprootJsonTest) {
 			witness = append(witness, witElem)
 		}
 
-		tx.MsgTx().TxIn[testCase.Index].Witness = witness
+		tx.TxIn[testCase.Index].Witness = witness
 
 		vm := makeVM()
 
@@ -997,7 +997,7 @@ func executeTaprootRefTest(t *testing.T, testCase taprootJsonTest) {
 	}
 
 	if testCase.Failure != nil {
-		tx.MsgTx().TxIn[testCase.Index].SignatureScript, err = hex.DecodeString(
+		tx.TxIn[testCase.Index].SignatureScript, err = hex.DecodeString(
 			testCase.Failure.ScriptSig,
 		)
 		if err != nil {
@@ -1014,7 +1014,7 @@ func executeTaprootRefTest(t *testing.T, testCase taprootJsonTest) {
 			witness = append(witness, witElem)
 		}
 
-		tx.MsgTx().TxIn[testCase.Index].Witness = witness
+		tx.TxIn[testCase.Index].Witness = witness
 
 		vm := makeVM()
 
