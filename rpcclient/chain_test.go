@@ -2,13 +2,14 @@ package rpcclient
 
 import (
 	"errors"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{}
@@ -145,7 +146,7 @@ func TestClientConnectedToWSServerRunner(t *testing.T) {
 	}
 
 	testTable := []TestTableItem{
-		TestTableItem{
+		{
 			Name: "TestGetChainTxStatsAsyncSuccessTx",
 			TestCase: func(t *testing.T) {
 				client, serverReceivedChannel, cleanup := makeClient(t)
@@ -158,7 +159,7 @@ func TestClientConnectedToWSServerRunner(t *testing.T) {
 				}
 			},
 		},
-		TestTableItem{
+		{
 			Name: "TestGetChainTxStatsAsyncShutdownError",
 			TestCase: func(t *testing.T) {
 				client, _, cleanup := makeClient(t)
@@ -191,7 +192,7 @@ func TestClientConnectedToWSServerRunner(t *testing.T) {
 				}
 			},
 		},
-		TestTableItem{
+		{
 			Name: "TestGetBestBlockHashAsync",
 			TestCase: func(t *testing.T) {
 				client, serverReceivedChannel, cleanup := makeClient(t)

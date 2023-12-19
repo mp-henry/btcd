@@ -20,7 +20,7 @@ import (
 	"github.com/btcsuite/btcd/mining/cpuminer"
 	"github.com/btcsuite/btcd/netsync"
 	"github.com/btcsuite/btcd/peer"
-	"github.com/btcsuite/btcd/txscript"
+	"github.com/btcsuite/btcd/txscript/v2"
 
 	"github.com/btcsuite/btclog"
 	"github.com/jrick/logrotate/rotator"

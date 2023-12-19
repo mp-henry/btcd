@@ -9,6 +9,7 @@ import (
 	"encoding/hex"
 	"testing"
 
+	"github.com/btcsuite/btcd/address/v2"
 	"github.com/btcsuite/btcd/btcec/v2"
 	. "github.com/btcsuite/btcd/btcutil/v2"
 	"github.com/btcsuite/btcd/chaincfg/v2"
@@ -119,7 +120,7 @@ func TestEncodeDecodeWIF(t *testing.T) {
 		{
 			name: "decodeInvalidChecksumWif",
 			wif:  "5HueCGU8rMjxEXxiPuD5BDku4MkFqeZyd4dZ1jvhTVqvbTLvyTj",
-			err:  ErrChecksumMismatch,
+			err:  address.ErrChecksumMismatch,
 		},
 	}
 

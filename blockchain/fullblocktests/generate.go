@@ -18,13 +18,14 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/btcsuite/btcd/address/v2"
 	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/btcec/v2"
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/btcsuite/btcd/btcutil/v2"
+	"github.com/btcsuite/btcd/chaincfg/v2"
+	"github.com/btcsuite/btcd/chainhash/v2"
+	"github.com/btcsuite/btcd/txscript/v2"
+	"github.com/btcsuite/btcd/wire/v2"
 )
 
 const (
@@ -216,7 +217,7 @@ func makeTestGenerator(params *chaincfg.Params) (testGenerator, error) {
 // payToScriptHashScript returns a standard pay-to-script-hash for the provided
 // redeem script.
 func payToScriptHashScript(redeemScript []byte) []byte {
-	redeemScriptHash := btcutil.Hash160(redeemScript)
+	redeemScriptHash := address.Hash160(redeemScript)
 	script, err := txscript.NewScriptBuilder().
 		AddOp(txscript.OP_HASH160).AddData(redeemScriptHash).
 		AddOp(txscript.OP_EQUAL).Script()
