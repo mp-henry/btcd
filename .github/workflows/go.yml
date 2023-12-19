@@ -45,11 +45,32 @@ jobs:
           flag-name: btcd
           parallel: true
 
+      - name: Send address
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: address/coverage.txt
+          flag-name: address
+          parallel: true
+
       - name: Send btcec
         uses: shogo82148/actions-goveralls@v1
         with:
           path-to-profile: btcec/coverage.txt
           flag-name: btcec
+          parallel: true
+
+      - name: Send chaincfg
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: chaincfg/coverage.txt
+          flag-name: chaincfg
+          parallel: true
+
+      - name: Send chaincfg coverage for chainhash package
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: chaincfg/chainhash/coverage.txt
+          flag-name: chaincfgchainhash
           parallel: true
 
       - name: Send btcutil coverage
@@ -62,8 +83,8 @@ jobs:
       - name: Send btcutil coverage for psbt package
         uses: shogo82148/actions-goveralls@v1
         with:
-          path-to-profile: btcutil/psbt/coverage.txt
-          flag-name: btcutilpsbt
+          path-to-profile: psbt/coverage.txt
+          flag-name: psbt
           parallel: true
       
       - name: Notify coveralls all reports sent

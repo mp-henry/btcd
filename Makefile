@@ -93,9 +93,14 @@ check: unit
 unit:
 	@$(call print, "Running unit tests.")
 	$(GOTEST_DEV) ./... -test.timeout=20m
+	cd address; $(GOTEST_DEV) ./... -test.timeout=20m
 	cd btcec; $(GOTEST_DEV) ./... -test.timeout=20m
 	cd btcutil; $(GOTEST_DEV) ./... -test.timeout=20m
-	cd btcutil/psbt; $(GOTEST_DEV) ./... -test.timeout=20m
+	cd chaincfg; $(GOTEST_DEV) ./... -test.timeout=20m
+	cd chainhash; $(GOTEST_DEV) ./... -test.timeout=20m
+	cd txscript; $(GOTEST_DEV) ./... -test.timeout=20m
+	cd psbt; $(GOTEST_DEV) ./... -test.timeout=20m
+	cd wire; $(GOTEST_DEV) ./... -test.timeout=20m
 
 unit-cover: $(GOACC_BIN)
 	@$(call print, "Running unit coverage tests.")
@@ -103,18 +108,26 @@ unit-cover: $(GOACC_BIN)
 	
 	# We need to remove the /v2 pathing from the module to have it work
 	# nicely with the CI tool we use to render live code coverage.
+	cd address; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
 	cd btcec; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
-
-	cd btcutil; $(GOACC_BIN) ./...
-
-	cd btcutil/psbt; $(GOACC_BIN) ./...
+	cd btcutil; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
+	cd chaincfg; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
+	cd chainhash; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
+	cd txscript; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
+	cd psbt; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
+	cd wire; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
 
 unit-race:
 	@$(call print, "Running unit race tests.")
 	env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
+	cd address; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
 	cd btcec; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
 	cd btcutil; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
-	cd btcutil/psbt; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
+	cd chaincfg; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
+	cd chainhash; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
+	cd txscript; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
+	cd psbt; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
+	cd wire; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
 
 # =========
 # UTILITIES
@@ -132,7 +145,8 @@ lint: $(LINT_BIN)
 
 clean:
 	@$(call print, "Cleaning source.$(NC)")
-	$(RM) coverage.txt btcec/coverage.txt btcutil/coverage.txt btcutil/psbt/coverage.txt
+	find . -name coverage.txt | xargs echo
+	find . -name coverage.txt.bak | xargs echo
 
 .PHONY: all \
 	default \
