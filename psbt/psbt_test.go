@@ -20,6 +20,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+const (
+	// SatoshiPerBitcoin is the number of satoshi in one bitcoin (1 BTC).
+	SatoshiPerBitcoin = 1e8
+)
+
 // Test vectors from:
 // // https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki#test-vectors
 
@@ -1471,7 +1476,7 @@ func TestWitnessForNonWitnessUtxo(t *testing.T) {
 			}},
 			TxOut: []*wire.TxOut{{
 				PkScript: outPkScript,
-				Value:    1.9 * btcutil.SatoshiPerBitcoin,
+				Value:    1.9 * SatoshiPerBitcoin,
 			}},
 		},
 		Inputs:  []PInput{{}},
